@@ -1,12 +1,25 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@1.2
-
 workflows:
   push_image:
     jobs:
-      - echo_test
+      - echo_test:
+          filters:
+            branches:
+              only:
+              - develop
+      - push_to_stg:
+          context: Cloud Secrets
+          filters:
+            branches:
+              only:
+              - develop
+      - push_to_prd:
+          context: Cloud Secrets
+          filters:
+            branches:
+              only:
+              - main
 
 jobs:
   echo_test:  
@@ -16,3 +29,23 @@ jobs:
       - run:
           name: Just echo a random keyword
           command: echo "CIRCLE_CI_TEST"
+  
+  push_to_stg:
+    docker:
+      - image: volanty/volanty-image
+    steps:
+      - run:
+          name: Push to STG Container Registry
+          command: |
+            echo ${SA_KEY_HML} | base64 -d >> /tmp/sa.json
+            push-image circle-ci-studies ${CIRCLE_SHA1} mangoo-hml /tmp/sa.json --base-repo=us.gcr.io/mangoo-hml
+  push_to_prd:
+    docker:
+      - image: volanty/volanty-image
+    steps:
+      - run:
+          name: Push to PRD Container Registry
+          command: |
+            echo ${SA_KEY} | base64 -d >> /tmp/sa.json
+            push-image circle-ci-studies ${CIRCLE_SHA1} moraesjeremias-studies /tmp/sa.json --base-repo=us.gcr.io/moraesjeremias-studies
+
