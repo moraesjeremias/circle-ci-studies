@@ -1,5 +1,8 @@
 version: 2.1
 
+defaults: &defaults
+  working_directory: ~/circle-ci-studies
+
 workflows:
   push_image:
     jobs:
@@ -31,9 +34,11 @@ jobs:
           command: echo "CIRCLE_CI_TEST"
   
   push_to_stg:
+    <<: *defaults  
     docker:
       - image: volanty/volanty-image
     steps:
+      - checkout
       - run:
           name: Push to STG Container Registry
           command: |
@@ -41,9 +46,11 @@ jobs:
             echo ${SA_KEY_HML} | base64 -d >> /tmp/sa.json
             push-image circle-ci-studies ${CIRCLE_SHA1} mangoo-hml /tmp/sa.json --base-repo=us.gcr.io/mangoo-hml
   push_to_prd:
+    <<: *defaults  
     docker:
       - image: volanty/volanty-image
     steps:
+      - checkout    
       - run:
           name: Push to PRD Container Registry
           command: |
