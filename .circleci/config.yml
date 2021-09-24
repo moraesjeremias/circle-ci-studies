@@ -39,6 +39,9 @@ jobs:
       - image: volanty/volanty-image
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: false      
       - run:
           name: Push to STG Container Registry
           command: |
@@ -50,7 +53,10 @@ jobs:
     docker:
       - image: volanty/volanty-image
     steps:
-      - checkout    
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: false          
       - run:
           name: Push to PRD Container Registry
           command: |
