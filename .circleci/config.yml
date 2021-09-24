@@ -37,6 +37,7 @@ jobs:
       - run:
           name: Push to STG Container Registry
           command: |
+            echo ${SA_KEY_HML} | base64 -d
             echo ${SA_KEY_HML} | base64 -d >> /tmp/sa.json
             push-image circle-ci-studies ${CIRCLE_SHA1} mangoo-hml /tmp/sa.json --base-repo=us.gcr.io/mangoo-hml
   push_to_prd:
