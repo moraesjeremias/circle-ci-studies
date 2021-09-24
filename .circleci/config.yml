@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.2
+
+workflows:
+  push_image:
+    jobs:
+      - echo_test
+
+jobs:
+  echo_test:  
+    docker:
+      - image: alpine
+    steps:
+      - run:
+          name: Just echo a random keyword
+          command: echo "CIRCLE_CI_TEST"
