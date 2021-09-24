@@ -12,7 +12,7 @@ def hello_circle_ci():
 
 
 if __name__ == '__main__':
-    uvicorn.run("circle_ci.main:app",
+    uvicorn.run("src.main:app",
                 port=os.getenv('PORT', 8080),
                 debug=True
                 )

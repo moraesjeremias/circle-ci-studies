@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='circle-ci',
     version='0.1.0',
-    packages=['circle_ci'],
+    packages=['src'],
     install_requires=[
         'fastapi',
         'uvicorn'
